@@ -86,7 +86,7 @@ list_namespace                      # Lists all namespaces
 ```bash
 # Insert Data
 create 'f', 'f1'
-put 'f', 1, 'f1:name', 'Richa'
+put 'f', 1, 'f1:name', 'Rohit'
 put 'f', 1, 'f1:city', 'XYZ'
 put 'f', 1, 'f1:id', '10'
 put 'f', 2, 'f1:address', 'abcdefg'
