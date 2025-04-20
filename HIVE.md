@@ -39,7 +39,7 @@ StartNetworkServer -h 0.0.0.0
 
 ```powershell
 # Navigate to Hive bin directory
-cd C:\hive\apache-hive-3.1.2-bin\apache-hive-3.1.2-bin\bin\
+cd C:\hive\apache-hive-3.1.3-bin\bin
 
 # Start Hive shell
 hive
@@ -47,17 +47,7 @@ hive
 
 ---
 
-### 🛠️ **Troubleshooting Safe Mode**
 
-```bash
-# Check if Hadoop is in safe mode
-hdfs dfsadmin -safemode get
-
-# Leave safe mode if active
-hdfs dfsadmin -safemode leave
-```
-
----
 
 ## 💾 HIVE COMMANDS
 

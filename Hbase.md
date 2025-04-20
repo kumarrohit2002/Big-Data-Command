@@ -15,7 +15,7 @@ jps
 
 ### ✅ **Start HBase**
 ```bash
-cd C:\hbasesetup\hbase-1.4.9\bin
+cd C:\hbasesetup\hbase-1.4.9-bin\hbase-1.4.9\bin
 start-hbase.cmd
 jps
 # Should show: HMaster (the HBase Master daemon)
