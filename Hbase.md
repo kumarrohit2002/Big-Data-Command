@@ -114,4 +114,230 @@ deleteall 'mytable', '1'                 # Delete all cells of a row
 count 'mytable'      # Returns number of rows in 'mytable'
 ```
 
+
+---
+
+# **Apache HBase Java API Reference & Shell Equivalent Operations**
+
+## **Overview:**
+HBase shell operations have equivalent Java APIs. This document provides a detailed understanding of how to interact with HBase using Java, covering common operations such as **table creation**, **data insertion**, **data retrieval**, **deletion**, and **filtering**.
+
+---
+
+## 🔧 **General Notes**
+
+| Operation             | HBase Shell                           | Java Equivalent Class/Method      |
+|-----------------------|----------------------------------------|-----------------------------------|
+| Create Table          | `create`                               | `HTableDescriptor`, `HColumnDescriptor`, `Admin.createTable()` |
+| Insert Data           | `put`                                  | `Put` class, `addColumn()`       |
+| Retrieve Data         | `get`                                  | `Get`, `Result`, `getValue()`    |
+| Delete Data           | `delete`                               | `Delete`, `addColumn()`          |
+| Filter Data           | `scan` with filters                    | `Scan`, `RowFilter`, `Filter`    |
+
+---
+
+## 🛠️ **PROGRAM 1: Create an HBase Table Using Java API**
+
+**Shell Equivalent:**
+```bash
+create 'my_table', 'colfam1', 'colfam2'
+```
+
+**Steps in Java:**
+1. Specify table name and column families
+2. Connect to HBase
+3. Use `HBaseAdmin` to create table
+
+**Java Code:**
+```java
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+
+import java.io.IOException;
+
+public class createTable {
+    public static void main(String[] args) throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection connection = ConnectionFactory.createConnection(conf);
+        Admin admin = connection.getAdmin();
+
+        HTableDescriptor tableName = new HTableDescriptor(TableName.valueOf("my_table"));
+        tableName.addFamily(new HColumnDescriptor("colfam1"));
+        tableName.addFamily(new HColumnDescriptor("colfam2"));
+
+        if (!admin.tableExists(tableName.getTableName())) {
+            System.out.print("Creating Table...");
+            admin.createTable(tableName);
+            System.out.println("Done");
+        }
+    }
+}
+```
+
+---
+
+## 📝 **PROGRAM 2: Insert Column for a Single Row ID**
+
+**Shell Equivalent:**
+```bash
+put 'my_table', '1', 'colfam1:id', '32410'
+put 'my_table', '1', 'colfam1:name', 'Richa'
+put 'my_table', '1', 'colfam1:country', 'India'
+```
+
+**Java Code:**
+```java
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+
+public class insertData {
+    public static void main(String[] args) throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection connection = ConnectionFactory.createConnection(conf);
+
+        Table table = connection.getTable(TableName.valueOf("my_table"));
+
+        Put put = new Put(Bytes.toBytes("1"));
+        put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("id"), Bytes.toBytes("32410"));
+        put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("name"), Bytes.toBytes("Richa"));
+        put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("country"), Bytes.toBytes("India"));
+
+        table.put(put);
+        System.out.print("Data inserted into the table");
+    }
+}
+```
+
+---
+
+## 📥 **PROGRAM 3: Retrieve Data for a Single Row ID Using `Get()`**
+
+**Shell Equivalent:**
+```bash
+get 'my_table', '1'
+```
+
+**Java Code:**
+```java
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+
+public class getData {
+    public static void main(String[] args) throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection connection = ConnectionFactory.createConnection(conf);
+
+        Table table = connection.getTable(TableName.valueOf("my_table"));
+        Get g = new Get(Bytes.toBytes("1"));
+        Result result = table.get(g);
+
+        String id = Bytes.toString(result.getValue(Bytes.toBytes("colfam1"), Bytes.toBytes("id")));
+        String name = Bytes.toString(result.getValue(Bytes.toBytes("colfam1"), Bytes.toBytes("name")));
+        String country = Bytes.toString(result.getValue(Bytes.toBytes("colfam1"), Bytes.toBytes("country")));
+
+        System.out.println("id: " + id + " name: " + name + " country: " + country);
+    }
+}
+```
+
+---
+
+## ❌ **PROGRAM 4: Delete Operation in HBase Table**
+
+**Shell Equivalent:**
+```bash
+delete 'my_table', '1', 'colfam1:Channel'
+```
+
+**Java Code:**
+```java
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+
+public class deleteData {
+    public static void main(String[] args) throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection connection = ConnectionFactory.createConnection(conf);
+
+        Table table = connection.getTable(TableName.valueOf("my_table"));
+
+        Delete delete = new Delete(Bytes.toBytes("1"));
+        delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("Channel"));
+
+        table.delete(delete);
+        table.close();
+    }
+}
+```
+
+---
+
+## 🔍 **PROGRAM 5: Filtering Data in Apache HBase Using Java API**
+
+**Shell Equivalent:**
+```bash
+scan 'my_table', {FILTER => "RowFilter(=, 'binary:1')"}
+```
+
+**Java Code:**
+```java
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.*;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.IOException;
+
+public class filterData {
+    public static void main(String[] args) throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection connection = ConnectionFactory.createConnection(conf);
+
+        Table table = connection.getTable(TableName.valueOf("my_table"));
+
+        Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL,
+                new BinaryComparator(Bytes.toBytes("1")));
+
+        Scan userScan = new Scan();
+        userScan.setFilter(filter);
+
+        ResultScanner userScanResult = table.getScanner(userScan);
+        for (Result res : userScanResult) {
+            System.out.println(res);
+        }
+        userScanResult.close();
+    }
+}
+```
+
+---
+
+## 📌 **Key Takeaways:**
+
+- All HBase shell commands can be translated into Java API calls.
+- Use **`Bytes`** class to convert data to byte arrays.
+- **`Connection`**, **`Admin`**, **`Table`**, **`Put`**, **`Get`**, **`Delete`**, **`Scan`**, and **`Filter`** are central classes in Java HBase client API.
+- Java API gives programmatic control for production applications and integration.
+
 ---
