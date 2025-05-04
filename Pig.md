@@ -1,4 +1,3 @@
-Here's a cleaned-up, **well-commented GitHub README-style post** explaining how to install and use **Apache Pig** locally or with Hadoop. Each command is explained with **what it does** and **why it's used**, especially for beginners:
 
 ---
 
