@@ -41,6 +41,9 @@ StartNetworkServer -h 0.0.0.0
 # Navigate to Hive bin directory
 cd C:\hive\apache-hive-3.1.3-bin\bin
 
+# if not created schema then
+ hive --service  schematool -dbType derby -initSchema 
+
 # Start Hive shell
 hive
 ```
