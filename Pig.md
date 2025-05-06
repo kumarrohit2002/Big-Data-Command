@@ -139,7 +139,21 @@ STORE data INTO 'C:/pigsetup/output/' USING PigStorage('|');
 ---
 
 ## 🔍 DESCRIBE, FILTER, DISTINCT, FOREACH
+### data1
+```data1
+1,John,CSE,85
+2,Alice,MATH,92
+3,Bob,CSE,67
+4,Eve,PHY,78
+5,Mike,MATH,56
+6,Lisa,CSE,88
+7,Tom,ECE,45
+8,Sam,CSE,90
+9,Nina,PHY,60
+10,Alex,ECE,82
+```
 
+### load data
 ```pig
 data1 = LOAD 'student_data.txt' USING PigStorage(',') AS (id:int, name:chararray, dept:chararray, marks:int);
 ```
