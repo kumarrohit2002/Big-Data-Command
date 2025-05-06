@@ -2,6 +2,20 @@
 
 ---
 
+| Feature              | **Hadoop**                              | **Hive**                                    | **HBase**                                     | **Pig**                                                |
+| -------------------- | --------------------------------------- | ------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| **Type**             | Framework                               | Data warehouse infrastructure               | NoSQL database (Column-oriented)              | Scripting platform                                     |
+| **Main Component**   | HDFS (storage) + MapReduce (processing) | Built on top of Hadoop                      | Built on top of HDFS                          | Built on top of Hadoop                                 |
+| **Data Type**        | Batch processing of large data sets     | Structured data (tables, similar to SQL)    | Semi-structured / Unstructured (key-value)    | Semi-structured                                        |
+| **Language Used**    | Java                                    | HiveQL (similar to SQL)                     | Java APIs                                     | Pig Latin (data flow language)                         |
+| **Use Case**         | Large-scale data processing             | Data summarization, ad-hoc querying         | Real-time read/write access to large datasets | ETL (Extract, Transform, Load) operations              |
+| **Query Language**   | None (programmatic Java-based)          | HiveQL                                      | No traditional query language, uses Java API  | Pig Latin                                              |
+| **Execution Engine** | MapReduce                               | Converts HiveQL to MapReduce                | Internally uses HDFS and HBase engine         | Converts Pig Latin to MapReduce                        |
+| **Latency**          | High (batch processing)                 | High (not for real-time queries)            | Low (near real-time access)                   | High (batch-based, like MapReduce)                     |
+| **Schema**           | Schema on read                          | Schema on read                              | Schema-less (column families defined)         | Schema on read                                         |
+| **Ideal For**        | Batch processing and storage            | Data analysis with familiar SQL-like syntax | Random, real-time access to big data          | Complex data transformations without writing Java code |
+
+
 ### **1. Introduction to Hadoop and Big Data**
 
 **Q1. What is Big Data? Mention its types with examples.**
